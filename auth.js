@@ -17,6 +17,7 @@ console.log('auth=>', auth)
 var sbtn = document.getElementById("sbtn")
 sbtn.addEventListener("click", signup)
 
+
 async function signup() {
   var semail = document.getElementById("semail")
   var spassword = document.getElementById("spassword")
@@ -43,6 +44,21 @@ async function signup() {
     });
 }
 
+
+onAuthStateChanged(auth,(user) => {
+  if (user) {
+    if (window.location.pathname.includes("signup.html") || window.location.pathname.includes("login.html")) {
+      window.location.href = "login.html";
+    }
+    else{
+      window.location.href = "signup.html"
+    }
+  }
+});
+
+
+// console.log("window.location.pathname=>",window.location.pathname)
+
 // Continue With Goggle
 const provider = new GoogleAuthProvider();
 
@@ -64,3 +80,5 @@ async function continueWithGoggle() {
       const credential = GoogleAuthProvider.credentialFromError(error);
     });
 }
+
+
