@@ -1,4 +1,13 @@
-import { initializeApp, getAuth, firebaseConfig, createUserWithEmailAndPassword, onAuthStateChanged } from "./firebase.js";
+import {
+  initializeApp,
+  getAuth,
+  firebaseConfig,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "./firebase.js";
+
 
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
@@ -14,7 +23,7 @@ async function signup() {
   var message = document.getElementById("mess")
 
   // else if(!)
-  if(!spassword.value || !semail.value){
+  if (!spassword.value || !semail.value) {
     message.innerText = "Please fill All Fields"
     return
   }
@@ -23,13 +32,35 @@ async function signup() {
       const user = userCredential.user;
       console.log("user=>", user.email)
       message.innerText = "Account Created Successfully"
-      message.style.color="green"
+      message.style.color = "green"
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
       message.innerText = "Please fill correct Email & Password";
-      message.style.color="red"
+      message.style.color = "red"
       console.log("Error=>", errorMessage)
+    });
+}
+
+// Continue With Goggle
+const provider = new GoogleAuthProvider();
+
+
+var goggleBtn = document.getElementById("goggleBtn")
+goggleBtn.addEventListener("click", continueWithGoggle)
+
+async function continueWithGoggle() {
+
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      const user = result.user;
+    }).catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      const email = error.customData.email;
+      const credential = GoogleAuthProvider.credentialFromError(error);
     });
 }
