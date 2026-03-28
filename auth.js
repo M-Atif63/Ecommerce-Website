@@ -14,6 +14,10 @@ async function signup() {
   var message = document.getElementById("mess")
 
   // else if(!)
+  if(!spassword.value || !semail.value){
+    message.innerText = "Please fill All Fields"
+    return
+  }
   createUserWithEmailAndPassword(auth, semail.value, spassword.value)
     .then((userCredential) => {
       const user = userCredential.user;
@@ -28,8 +32,4 @@ async function signup() {
       message.style.color="red"
       console.log("Error=>", errorMessage)
     });
-    if(!spassword.value || !semail.value){
-      message.innerText = "Please fill All Fields"
-      return
-    }
 }
