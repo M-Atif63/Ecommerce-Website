@@ -62,3 +62,8 @@ async function openLoginPage() {
         window.location.href = "login.html"
     }
 }
+
+
+// Realtime Data Base Started
+
+
