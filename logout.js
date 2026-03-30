@@ -1,5 +1,6 @@
 import { initializeApp, firebaseConfig, } from "./firebase.js";
 import { getAuth, signOut, onAuthStateChanged } from "./firebase.js";
+import { getDatabase,ref,set } from "./firebase.js"
 
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
@@ -50,15 +51,15 @@ async function logout() {
 
 signupBtn.addEventListener("click", openSignupPage)
 async function openSignupPage() {
-    if (window.location.pathname.includes("dashboard.html")){
+    if (window.location.pathname.includes("dashboard.html")) {
         window.location.href = "signup.html"
     }
 }
 
-loginBtn.addEventListener("click",openLoginPage)
+loginBtn.addEventListener("click", openLoginPage)
 
 async function openLoginPage() {
-    if(window.location.pathname.includes("dashboard.html")){
+    if (window.location.pathname.includes("dashboard.html")) {
         window.location.href = "login.html"
     }
 }
@@ -66,4 +67,22 @@ async function openLoginPage() {
 
 // Realtime Data Base Started
 
+const database = getDatabase(app)
+console.log("getDatabase=>", getDatabase)
 
+
+var proSubmitBtn = document.getElementById("proSubmitBtn")
+proSubmitBtn.addEventListener("click", addProduct)
+
+function addProduct() {
+    var proTitle = document.getElementById("proTitle")
+    var proDesc = document.getElementById("proDesc")
+    var proImg = document.getElementById("proImg")
+    var Id = new Date;
+    var collection = ref(database,"product/",Id)
+    set(ref(database, 'product/' + Id), {
+        Title: this.proTitle.value,
+        Desc: this.proDesc.value,
+        productImg: this.proImg.value
+    });
+}
