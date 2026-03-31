@@ -1,6 +1,6 @@
 import { initializeApp, firebaseConfig, } from "./firebase.js";
 import { getAuth, signOut, onAuthStateChanged } from "./firebase.js";
-import { getDatabase, ref, set } from "./firebase.js"
+import { getDatabase, ref, set, onValue } from "./firebase.js"
 
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
@@ -71,12 +71,12 @@ const database = getDatabase(app)
 console.log("getDatabase=>", getDatabase)
 
 
-var proSubmitBtn = document.getElementById("proSubmitBtn")
-proSubmitBtn.addEventListener("click", addProduct)
-var proTitle = document.getElementById("proTitle")
-var proDesc = document.getElementById("proDesc")
-var proImg = document.getElementById("proImg")
-var message = document.getElementById("message")
+var proSubmitBtn = document.getElementById("proSubmitBtn");
+proSubmitBtn.addEventListener("click", addProduct);
+var proTitle = document.getElementById("proTitle");
+var proDesc = document.getElementById("proDesc");
+var proImg = document.getElementById("proImg");
+var message = document.getElementById("message");
 
 async function addProduct() {
     var Id = new Date();
@@ -107,4 +107,34 @@ async function addProduct() {
         }
     });
 }
+
+
+var proList = document.getElementById("proList")
+
+var coll = ref(database, 'product/')
+onValue(coll, (snapshot) => {
+        const data = snapshot.val();
+        proList.innerHTML = ""
+        for (let key in data) {
+            console.log("key=>",key)
+            var li = document.createElement("li")
+            li.textContent = `${data[key].Title} ${data[key].Desc}`
+            var img = document.createElement("img")
+            img.src = data[key].ImgUrl;
+            li.appendChild(img);
+            proList.appendChild(li)
+        }
+    });
+
+
+
+
+
+
+
+
+
+
+
+
 
